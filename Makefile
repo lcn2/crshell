@@ -2,9 +2,9 @@
 #
 # crshell - start a shell if return is read during a limited a period of time
 #
-# @(#) $Revision$
-# @(#) $Id$
-# @(#) $Source$
+# @(#) $Revision: 1.1 $
+# @(#) $Id: Makefile,v 1.1 2000/03/26 01:54:38 root Exp root $
+# @(#) $Source: /usr/local/src/cmd/crshell/RCS/Makefile,v $
 #
 # Copyright (c) 2000 by Landon Curt Noll.  All Rights Reserved.
 #
@@ -32,12 +32,11 @@
 
 
 SHELL = /bin/sh
-DEST = /usr/local/bin
-RM = /bin/rm -f
-CP = /bin/cp
-CHMOD = /bin/chmod
+DESTBIN = /usr/local/bin
+DESTSBIN = /sbin
 CC = cc
 CFLAGS = -O2
+INSTALL = install
 
 TARGETS = crshell
 
@@ -47,14 +46,8 @@ crshell: crshell.c
 	${CC} ${CFLAGS} -o crshell crshell.c
 
 install: all
-	@for i in ${TARGETS}; do \
-	    echo "${RM} ${DEST}/$$i"; \
-	    ${RM} ${DEST}/$$i; \
-	    echo "${CP} $$i ${DEST}"; \
-	    ${CP} $$i ${DEST}; \
-	    echo "${CHMOD} 0555 ${DEST}/$$i"; \
-	    ${CHMOD} 0555 ${DEST}/$$i; \
-	done
+	${INSTALL} -m 0555 ${TARGETS} ${DESTBIN}
+	${INSTALL} -m 0555 ${TARGETS} ${DESTSBIN}
 
 clean:
 	${RM} *.o
