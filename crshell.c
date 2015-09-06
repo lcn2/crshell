@@ -1,9 +1,9 @@
 /*
  * crshell - start a shell if return is read during a limited a period of time
  *
- * @(#) $Revision$
- * @(#) $Id$
- * @(#) $Source$
+ * @(#) $Revision: 1.1 $
+ * @(#) $Id: crshell.c,v 1.1 2000/03/26 01:54:38 root Exp root $
+ * @(#) $Source: /usr/local/src/bin/crshell/RCS/crshell.c,v $
  *
  * Copyright (c) 2000 by Landon Curt Noll.  All Rights Reserved.
  *
@@ -36,8 +36,9 @@
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-#define SHELL "/bin/sh"		/* what we will run when a key is pressed */
+#define SHELL "/bin/bash"	/* what we will run when a key is pressed */
 
 static struct termios old;	/* orignal old state of descriptor 0 */
 static struct termios new;	/* changed new state of descriptor 0 */
@@ -94,7 +95,7 @@ main(int argc, char **argv)
     program = argv[0];
     switch (argc) {
     case 3:
-	msec = strtol(argv[1], 0, NULL);
+	msec = strtol(argv[1], NULL, 0);
 	message = argv[2];
 	break;
     default:
