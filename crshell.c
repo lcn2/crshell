@@ -5,7 +5,7 @@
  * @(#) $Id: crshell.c,v 1.2 2015/09/06 06:45:50 root Exp $
  * @(#) $Source: /usr/local/src/bin/crshell/RCS/crshell.c,v $
  *
- * Copyright (c) 2000 by Landon Curt Noll.  All Rights Reserved.
+ * Copyright (c) 2000,2023 by Landon Curt Noll.  All Rights Reserved.
  *
  * Permission to use, copy, modify, and distribute this software and
  * its documentation for any purpose and without fee is hereby granted,
@@ -81,7 +81,7 @@ sig_catch(int arg)
     reset_exit(2);
 }
 
-
+int
 main(int argc, char **argv)
 {
     fd_set in;			/* read selection */
@@ -99,7 +99,7 @@ main(int argc, char **argv)
 	message = argv[2];
 	break;
     default:
-    	fprintf(stderr, "usage: %s msec 'message'\n", program);
+	fprintf(stderr, "usage: %s msec 'message'\n", program);
 	exit(1);
     }
 
@@ -152,7 +152,7 @@ main(int argc, char **argv)
 	printf("\nstarting a %s shell, type exit to return ...\n\n", SHELL);
 	fflush(stdin);
 	fflush(stdout);
-    	system(SHELL);
+	system(SHELL);
 	printf("\nreturned from the %s shell");
     }
 
