@@ -1,8 +1,8 @@
 /*
  * crshell - start a shell if return is read during a limited a period of time
  *
- * @(#) $Revision: 1.1 $
- * @(#) $Id: crshell.c,v 1.1 2000/03/26 01:54:38 root Exp root $
+ * @(#) $Revision: 1.2 $
+ * @(#) $Id: crshell.c,v 1.2 2015/09/06 06:45:50 root Exp $
  * @(#) $Source: /usr/local/src/bin/crshell/RCS/crshell.c,v $
  *
  * Copyright (c) 2000 by Landon Curt Noll.  All Rights Reserved.

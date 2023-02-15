@@ -2,9 +2,9 @@
 #
 # crshell - start a shell if return is read during a limited a period of time
 #
-# @(#) $Revision: 1.1 $
-# @(#) $Id: Makefile,v 1.1 2000/03/26 01:54:38 root Exp root $
-# @(#) $Source: /usr/local/src/cmd/crshell/RCS/Makefile,v $
+# @(#) $Revision: 1.2 $
+# @(#) $Id: Makefile,v 1.2 2000/03/26 02:09:56 root Exp $
+# @(#) $Source: /usr/local/src/bin/crshell/RCS/Makefile,v $
 #
 # Copyright (c) 2000 by Landon Curt Noll.  All Rights Reserved.
 #
