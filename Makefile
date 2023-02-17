@@ -29,7 +29,6 @@
 
 SHELL= bash
 DESTBIN= /usr/local/bin
-DESTSBIN= /sbin
 CC= cc
 CFLAGS= -O3 -g3
 INSTALL= install
@@ -43,7 +42,6 @@ crshell: crshell.c
 
 install: all
 	${INSTALL} -m 0555 ${TARGETS} ${DESTBIN}
-	${INSTALL} -m 0555 ${TARGETS} ${DESTSBIN}
 
 clean:
 	${RM} *.o
