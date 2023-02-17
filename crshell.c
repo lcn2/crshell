@@ -153,7 +153,7 @@ main(int argc, char **argv)
 	fflush(stdin);
 	fflush(stdout);
 	system(SHELL);
-	printf("\nreturned from the %s shell");
+	printf("\nreturned from the %s shell", SHELL);
     }
 
     /*
