@@ -1,12 +1,8 @@
-#!/usr/bin/make
+#!/usr/bin/env make
 #
 # crshell - start a shell if return is read during a limited a period of time
 #
-# @(#) $Revision: 1.2 $
-# @(#) $Id: Makefile,v 1.2 2000/03/26 02:09:56 root Exp $
-# @(#) $Source: /usr/local/src/bin/crshell/RCS/Makefile,v $
-#
-# Copyright (c) 2000 by Landon Curt Noll.  All Rights Reserved.
+# Copyright (c) 2000,2023 by Landon Curt Noll.  All Rights Reserved.
 #
 # Permission to use, copy, modify, and distribute this software and
 # its documentation for any purpose and without fee is hereby granted,
@@ -31,7 +27,7 @@
 # Share and enjoy!
 
 
-SHELL = /bin/sh
+SHELL = bash
 DESTBIN = /usr/local/bin
 DESTSBIN = /sbin
 CC = cc
