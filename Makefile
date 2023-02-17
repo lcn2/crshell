@@ -31,7 +31,7 @@ SHELL = bash
 DESTBIN = /usr/local/bin
 DESTSBIN = /sbin
 CC = cc
-CFLAGS = -O2
+CFLAGS = -O3 -g3
 INSTALL = install
 
 TARGETS = crshell
