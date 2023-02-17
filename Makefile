@@ -27,14 +27,14 @@
 # Share and enjoy!
 
 
-SHELL = bash
-DESTBIN = /usr/local/bin
-DESTSBIN = /sbin
-CC = cc
-CFLAGS = -O3 -g3
-INSTALL = install
+SHELL= bash
+DESTBIN= /usr/local/bin
+DESTSBIN= /sbin
+CC= cc
+CFLAGS= -O3 -g3
+INSTALL= install
 
-TARGETS = crshell
+TARGETS= crshell
 
 all: ${TARGETS}
 
