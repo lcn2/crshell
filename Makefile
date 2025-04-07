@@ -2,7 +2,7 @@
 #
 # crshell - start a shell if return is read during a limited a period of time
 #
-# Copyright (c) 2000,2023 by Landon Curt Noll.  All Rights Reserved.
+# Copyright (c) 2000,2015,2023,2025 by Landon Curt Noll.  All Rights Reserved.
 #
 # Permission to use, copy, modify, and distribute this software and
 # its documentation for any purpose and without fee is hereby granted,
@@ -22,29 +22,88 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 #
-# chongo <was here> /\oo/\
+# chongo (Landon Curt Noll) /\oo/\
 #
-# Share and enjoy!
+# http://www.isthe.com/chongo/index.html
+# https://github.com/lcn2
+#
+# Share and enjoy!  :-)
 
 
-SHELL= bash
-DESTBIN= /usr/local/bin
+#############
+# utilities #
+#############
+
 CC= cc
-CFLAGS= -O3 -g3
+CHMOD= chmod
+CP= cp
+ID= id
 INSTALL= install
+RM= rm
+SHELL= bash
+
+#CFLAGS= -O3 -g3 --pedantic -Wall -Werror
+CFLAGS= -O3 -g3 --pedantic -Wall
+
+
+######################
+# target information #
+######################
+
+# V=@:  do not echo debug statements (quiet mode)
+# V=@   echo debug statements (debug / verbose mode)
+#
+V=@:
+#V=@
+
+DESTDIR= /usr/local/bin
 
 TARGETS= crshell
 
+
+######################################
+# all - default rule - must be first #
+######################################
+
 all: ${TARGETS}
+	${V} echo DEBUG =-= $@ start =-=
+	${V} echo DEBUG =-= $@ end =-=
 
-crshell: crshell.c
-	${CC} ${CFLAGS} -o crshell crshell.c
+crshell.o: crshell.c
+	${CC} ${CFLAGS} crshell.c -c
 
-install: all
-	${INSTALL} -m 0555 ${TARGETS} ${DESTBIN}
+crshell: crshell.o
+	${CC} ${CFLAGS} crshell.o -o $@
+
+
+#################################################
+# .PHONY list of rules that do not create files #
+#################################################
+
+.PHONY: all configure clean clobber install
+
+
+###################################
+# standard Makefile utility rules #
+###################################
+
+configure:
+	${V} echo DEBUG =-= $@ start =-=
+	${V} echo DEBUG =-= $@ end =-=
 
 clean:
-	${RM} *.o
+	${V} echo DEBUG =-= $@ start =-=
+	${RM} -f crshell.o
+	${V} echo DEBUG =-= $@ end =-=
 
 clobber: clean
-	${RM} ${TARGETS}
+	${V} echo DEBUG =-= $@ start =-=
+	${RM} -f crshell
+	${V} echo DEBUG =-= $@ end =-=
+
+install: all
+	${V} echo DEBUG =-= $@ start =-=
+	@if [[ $$(${ID} -u) != 0 ]]; then echo "ERROR: must be root to make $@" 1>&2; exit 2; fi
+	${INSTALL} -d -m 0755 ${DESTDIR}
+	${INSTALL} -m 0555 ${TARGETS} ${DESTDIR}
+	${V} echo DEBUG =-= $@ end =-=

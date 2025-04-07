@@ -1,11 +1,7 @@
 /*
  * crshell - start a shell if return is read during a limited a period of time
  *
- * @(#) $Revision: 1.2 $
- * @(#) $Id: crshell.c,v 1.2 2015/09/06 06:45:50 root Exp $
- * @(#) $Source: /usr/local/src/bin/crshell/RCS/crshell.c,v $
- *
- * Copyright (c) 2000,2023 by Landon Curt Noll.  All Rights Reserved.
+ * Copyright (c) 2000,2015,2023,2025 by Landon Curt Noll.  All Rights Reserved.
  *
  * Permission to use, copy, modify, and distribute this software and
  * its documentation for any purpose and without fee is hereby granted,
@@ -37,12 +33,98 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
+#include <sys/errno.h>
 
-#define SHELL "/bin/bash"	/* what we will run when a key is pressed */
+#define SHELL "bash"	/* what we will run when a key is pressed */
 
+/*
+ * official version
+ */
+#define VERSION "1.2.1 2025-04-06"          /* format: major.minor YYYY-MM-DD */
+
+
+/*
+ * usage message
+ */
+static const char * const usage =
+  "usage: %s [-h] [-v level] [-V] [-n] msec message\n"
+        "\n"
+        "    -h            print help message and exit\n"
+        "    -v level      set verbosity level (def level: 0)\n"
+        "    -V            print version string and exit\n"
+        "\n"
+        "    msec	   timeout in milliseconds\n"
+        "    message	   leading prompt string\n"
+        "\n"
+        "Exit codes:\n"
+        "    0         all OK\n"
+        "    2         -h and help string printed or -V and version string printed\n"
+        "    3         command line error\n"
+        " >= 10        internal error\n"
+        "\n"
+        "%s version: %s\n";
+
+
+/*
+ * static declarations
+ */
+static char *program = NULL;    /* our name */
+static char *prog = NULL;       /* basename of program */
+static const char * const version = VERSION;
+static long verbosity = 0;      /* verbosity level */
 static struct termios old;	/* orignal old state of descriptor 0 */
 static struct termios new;	/* changed new state of descriptor 0 */
-static char *program;		/* our name */
+/**/
+static void pr_usage(FILE *stream);
+static void restore_state(int fd);
+static void reset_exit(int exitval);
+static void sig_catch(int arg);
+
+
+/*
+ * pr_usage - print usage message
+ *
+ * given:
+ *
+ *    stream - print usage message on stream, NULL ==> stderr
+ */
+static void
+pr_usage(FILE *stream)
+{
+    /*
+     * NULL stream means stderr
+     */
+    if (stream == NULL) {
+        stream = stderr;
+    }
+
+    /*
+     * firewall - change program if NULL
+     */
+    if (program == NULL) {
+        program = "((NULL))";
+    }
+
+    /*
+     * firewall set name if NULL
+     */
+    if (prog == NULL) {
+        prog = rindex(program, '/');
+    }
+    /* paranoia if no / is found */
+    if (prog == NULL) {
+        prog = program;
+    } else {
+        ++prog;
+    }
+
+    /*
+     * print usage message to stderr
+     */
+    fprintf(stream, usage, program, prog, version);
+}
+
 
 /*
  * restore_state - reset descriptor 0 state
@@ -81,26 +163,72 @@ sig_catch(int arg)
     reset_exit(2);
 }
 
+
 int
 main(int argc, char **argv)
 {
     fd_set in;			/* read selection */
     struct timeval timeout;	/* how long to wait for input */
-    int msec;			/* milliseconds to wait */
+    long msec;			/* milliseconds to wait */
     char *message;		/* what to initially print without a newline */
+    int i;
 
     /*
      * parse args
      */
     program = argv[0];
+    while ((i = getopt(argc, argv, ":hv:Vnco:")) != -1) {
+        switch (i) {
+
+        case 'h':                   /* -h - print help message and exit */
+            pr_usage(stderr);
+            exit(2); /* ooo */
+            /*NOTREACHED*/
+
+        case 'v':                   /* v level - set verbosity level */
+            errno = 0;
+            verbosity = strtol(optarg, NULL, 0);
+            if (errno != 0 || verbosity < 0) {
+                verbosity = 0;
+            }
+            break;
+
+        case 'V':                   /* -V - print version string and exit */
+            (void) printf("%s\n", version);
+            exit(2); /* ooo */
+            /*NOTREACHED*/
+
+	case ':':
+            (void) fprintf(stderr, "%s: ERROR: requires an argument -- %c\n", program, optopt);
+            pr_usage(stderr);
+            exit(3); /* ooo */
+            /*NOTREACHED*/
+
+        case '?':
+            (void) fprintf(stderr, "%s: ERROR: illegal option -- %c\n", program, optopt);
+            pr_usage(stderr);
+            exit(3); /* ooo */
+            /*NOTREACHED*/
+
+        default:
+            fprintf(stderr, "%s: ERROR: invalid -flag\n", program);
+            pr_usage(stderr);
+            exit(3); /* ooo */
+            /*NOTREACHED*/
+        }
+    }
+    /* skip over command line options */
+    argv += optind;
+    argc -= optind;
+    /* check the arg count */
     switch (argc) {
-    case 3:
-	msec = strtol(argv[1], NULL, 0);
-	message = argv[2];
+    case 2:
+	msec = strtol(argv[0], NULL, 0);
+	message = argv[1];
 	break;
     default:
-	fprintf(stderr, "usage: %s msec 'message'\n", program);
-	exit(1);
+	pr_usage(stderr);
+	exit(3);
     }
 
     /*
