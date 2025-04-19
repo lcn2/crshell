@@ -21,10 +21,14 @@
  * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  *
- * chongo <was here> /\oo/\
+ * chongo (Landon Curt Noll) /\oo/\
  *
- * Share and enjoy!
+ * http://www.isthe.com/chongo/index.html
+ * https://github.com/lcn2
+ *
+ * Share and enjoy!  :-)
  */
+
 
 #include <sys/time.h>
 #include <sys/types.h>
