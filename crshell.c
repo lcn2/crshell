@@ -77,7 +77,7 @@ static char *program = NULL;    /* our name */
 static char *prog = NULL;       /* basename of program */
 static const char * const version = VERSION;
 static long verbosity = 0;      /* verbosity level */
-static struct termios old;	/* orignal old state of descriptor 0 */
+static struct termios old;	/* original old state of descriptor 0 */
 static struct termios new;	/* changed new state of descriptor 0 */
 /**/
 static void pr_usage(FILE *stream);
