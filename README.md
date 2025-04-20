@@ -65,4 +65,4 @@ crshell version: 1.2.1 2025-04-06
 
 # Reporting Security Issues
 
-To report a security issue, please visit "[Reporting Security Issues](https://github.com/lcn2/XXX/security/policy)".
+To report a security issue, please visit "[Reporting Security Issues](https://github.com/lcn2/crshell/security/policy)".
